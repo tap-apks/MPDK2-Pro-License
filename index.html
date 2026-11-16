@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050b12">
+  <title>MPDK2 Pro — Payment Success</title>
+  <style>
+    :root {
+      --bg: #050a11;
+      --panel: rgba(12, 22, 34, .94);
+      --line: rgba(65, 255, 112, .28);
+      --green: #54ff36;
+      --green2: #16d96a;
+      --text: #f4f8ff;
+      --muted: #9aaabd;
+      --red: #ff6475;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 18px 14px 34px;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(0, 255, 89, .13), transparent 42%),
+        radial-gradient(ellipse at 100% 45%, rgba(0, 105, 255, .10), transparent 35%),
+        var(--bg);
+      font-family: Inter, Roboto, "Segoe UI", Arial, sans-serif;
+    }
+    .wrap { width: min(760px, 100%); margin: 0 auto; }
+    .banner {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: auto;
+      object-fit: contain;
+      border-radius: 16px;
+      border: 1px solid rgba(98,255,127,.42);
+      box-shadow: 0 0 28px rgba(38,255,91,.16), 0 18px 45px rgba(0,0,0,.4);
+      background: #101923;
+    }
+    .intro { text-align: center; padding: 24px 10px 18px; }
+    .eyebrow {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 8px 0 6px;
+      font-size: clamp(27px, 6vw, 39px);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+    .subtitle { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .card {
+      margin-top: 14px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(16,29,43,.97), rgba(7,13,22,.97));
+      box-shadow: 0 12px 34px rgba(0,0,0,.25), inset 0 1px rgba(255,255,255,.035);
+    }
+    .section-title {
+      margin: 0 0 15px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .device-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field {
+      min-width: 0;
+      padding: 12px;
+      border-radius: 11px;
+      border: 1px solid rgba(151,176,202,.13);
+      background: rgba(255,255,255,.035);
+    }
+    .field.wide { grid-column: 1 / -1; }
+    .label {
+      display: block;
+      margin-bottom: 6px;
+      color: #8296aa;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .value {
+      display: block;
+      overflow-wrap: anywhere;
+      color: #edf5ff;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+    .key-box {
+      padding: 15px;
+      border-radius: 13px;
+      border: 1px solid rgba(84,255,54,.42);
+      background: rgba(42,255,76,.055);
+    }
+    .key {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      overflow-wrap: anywhere;
+      color: #c9ffbd;
+      font: 700 14px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+      letter-spacing: .035em;
+      user-select: text;
+    }
+    button {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 13px;
+      border: 0;
+      border-radius: 11px;
+      color: #06110a;
+      background: linear-gradient(100deg, #9aff35, #28e86a);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      cursor: pointer;
+      box-shadow: 0 7px 22px rgba(44,255,92,.17);
+    }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .notice {
+      margin-top: 12px;
+      padding: 12px 13px;
+      border-radius: 10px;
+      color: var(--muted);
+      background: rgba(255,255,255,.035);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+      padding: 7px 11px;
+      border: 1px solid rgba(84,255,54,.3);
+      border-radius: 999px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
+    .status.error { color: var(--red); border-color: rgba(255,100,117,.35); }
+    footer { padding: 27px 10px 8px; text-align: center; }
+    .thanks { margin: 0 0 7px; color: #eaf2ff; font-size: 14px; font-weight: 800; letter-spacing: .06em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 12px; }
+    .studio { margin-top: 19px; color: #dce7f3; font-size: 17px; font-weight: 900; letter-spacing: .18em; }
+    .studio small { display: block; margin-top: 6px; color: #6f8295; font-size: 9px; letter-spacing: .55em; }
+    @media (max-width: 440px) {
+      body { padding: 12px 10px 26px; }
+      .card { padding: 16px; }
+      .device-grid { grid-template-columns: 1fr; }
+      .field.wide { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <img class="banner"
+      src="https://github.com/tap-apks1/Url_Link_mpdk2/releases/download/music-v1/20261116_200313.jpg"
+      alt="MPDK2 — Payment Success Banner"
+      onerror="this.style.display='none'; document.getElementById('bannerError').hidden=false;">
+    <div id="bannerError" class="notice" hidden>Banner tidak dapat dimuat. Periksa tautan gambar GitHub.</div>
+
+    <header class="intro">
+      <div class="eyebrow">MPDK2 Pro License</div>
+      <h1>Selamat!</h1>
+      <p class="subtitle">Pembayaran Berhasil</p>
+      <div id="statusBadge" class="status"><span class="dot"></span><span id="statusText">MEMERIKSA PEMBAYARAN</span></div>
+    </header>
+
+    <section class="card">
+      <h2 class="section-title">Device Information</h2>
+      <div class="device-grid">
+        <div class="field">
+          <span class="label">Nama Perangkat</span>
+          <span class="value" id="deviceName">Menunggu verifikasi...</span>
+        </div>
+        <div class="field">
+          <span class="label">IP Address</span>
+          <span class="value" id="deviceIp">—</span>
+        </div>
+        <div class="field wide">
+          <span class="label">Device Hash</span>
+          <span class="value" id="deviceHash">—</span>
+        </div>
+        <div class="field wide">
+          <span class="label">License</span>
+          <span class="value" id="licenseType">MPDK2 PRO · LIFETIME</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Your API Key</h2>
+      <div class="key-box">
+        <div class="key" id="apiKey">API KEY AKAN MUNCUL SETELAH PEMBAYARAN TERVERIFIKASI</div>
+        <button id="copyButton" type="button" disabled>COPY API KEY</button>
+      </div>
+      <div class="notice">
+        Salin API Key ini, lalu kembali ke MPDK2. Buka halaman Info Developer → Pro Licence,
+        tempelkan kode pada kolom aktivasi, kemudian tekan Activate. Simpan kode ini untuk
+        pemulihan lisensi jika aplikasi perlu dipasang ulang.
+      </div>
+      <div id="message" class="notice" role="status">
+        Menghubungkan ke server lisensi. Jangan tutup halaman ini dahulu.
+      </div>
+    </section>
+
+    <footer>
+      <p class="thanks">THANK YOU FOR CHOOSING MPDK2 PRO</p>
+      <p class="tagline">Enjoy the Full Drum Experience</p>
+      <div class="studio">MPDK2 STUDIO<small>REAL DRUM EXPERIENCE ON ANDROID</small></div>
+    </footer>
+  </main>
+
+  <script>
+    /*
+      KONFIGURASI INTEGRASI:
+      1. Ganti API_BASE_URL dengan alamat backend milikmu.
+      2. Backend harus memverifikasi webhook pembayaran Lynk.id sebelum mengirim
+         payment_status: "paid" dan api_key.
+      3. Jangan pernah menaruh JSONBin Master Key / secret di file HTML ini.
+
+      Parameter URL yang diharapkan:
+      https://username.github.io/repo/?session=TOKEN_SESI_DARI_MPDK2
+
+      Contoh respons backend:
+      {
+        "payment_status": "paid",
+        "device": {
+          "brand": "Xiaomi",
+          "model": "M2012K11AG",
+          "ip": "203.0.113.10",
+          "device_hash": "..."
+        },
+        "license_type": "PREMIUM LIFETIME",
+        "api_key": "..."
+      }
+    */
+    const API_BASE_URL = "https://YOUR-BACKEND-DOMAIN.example";
+    const SESSION_TOKEN = new URLSearchParams(location.search).get("session");
+
+    const $ = (id) => document.getElementById(id);
+    const setStatus = (text, error = false) => {
+      $("statusText").textContent = text;
+      $("statusBadge").classList.toggle("error", error);
+    };
+
+    async function loadLicense() {
+      if (!SESSION_TOKEN) {
+        setStatus("SESI TIDAK DITEMUKAN", true);
+        $("message").textContent = "Halaman ini harus dibuka melalui tautan checkout MPDK2 yang membawa token sesi pembelian.";
+        return;
+      }
+
+      if (API_BASE_URL.includes("YOUR-BACKEND-DOMAIN")) {
+        setStatus("BACKEND BELUM DIATUR", true);
+        $("message").textContent = "Tampilan halaman sudah siap. Hubungkan API_BASE_URL ke backend lisensi sebelum dipublikasikan.";
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          API_BASE_URL.replace(/\/$/, "") + "/public/purchase-session?session=" + encodeURIComponent(SESSION_TOKEN),
+          { method: "GET", headers: { "Accept": "application/json" }, cache: "no-store" }
+        );
+
+        if (!response.ok) throw new Error("Server belum dapat memverifikasi sesi (" + response.status + ").");
+        const data = await response.json();
+
+        if (data.payment_status !== "paid" || !data.api_key || !data.device) {
+          setStatus("PEMBAYARAN BELUM TERVERIFIKASI", true);
+          $("message").textContent = "API Key belum diterbitkan. Pastikan pembayaran selesai dan tunggu verifikasi dari server.";
+          return;
+        }
+
+        const device = data.device;
+        $("deviceName").textContent = [device.brand, device.model].filter(Boolean).join(" ") || "Tidak tersedia";
+        $("deviceIp").textContent = device.ip || "Tidak tersedia";
+        $("deviceHash").textContent = device.device_hash || "Tidak tersedia";
+        $("licenseType").textContent = data.license_type || "PREMIUM LIFETIME";
+        $("apiKey").textContent = data.api_key;
+        $("copyButton").disabled = false;
+        $("message").textContent = "Pembayaran telah diverifikasi. Salin API Key dan masukkan ke menu Pro Licence di aplikasi MPDK2.";
+        setStatus("PAYMENT VERIFIED");
+      } catch (error) {
+        setStatus("GAGAL MENGHUBUNGI SERVER", true);
+        $("message").textContent = error.message || "Terjadi kesalahan saat mengambil data lisensi.";
+      }
+    }
+
+    $("copyButton").addEventListener("click", async () => {
+      const key = $("apiKey").textContent.trim();
+      if (!key || key.startsWith("API KEY AKAN")) return;
+      try {
+        await navigator.clipboard.writeText(key);
+        $("copyButton").textContent = "API KEY COPIED ✓";
+        $("message").textContent = "API Key berhasil disalin. Kembali ke MPDK2 untuk melakukan aktivasi.";
+      } catch (_) {
+        $("message").textContent = "Tidak dapat menyalin otomatis. Tekan lama API Key, lalu pilih Salin.";
+      }
+    });
+
+    loadLicense();
+  </script>
+</body>
+</html>
